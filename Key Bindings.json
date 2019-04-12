@@ -1,0 +1,3 @@
+[
+	{ "keys": ["Ctrl+G"], "command": "list_git_commands" }
+]
