@@ -6,8 +6,16 @@ from fman import QuicksearchItem, show_quicksearch
 from fman.url import as_human_readable
 import subprocess
 
+class ListGitCommands(DirectoryPaneCommand):
+    _git_commands = [
+        QuicksearchItem('add', 'Add', highlight=range(0,1)),
+        QuicksearchItem('commit', 'Commit', highlight=range(0,1)),
+        QuicksearchItem('log', 'Logs Folder', highlight=range(0,1)),
+        QuicksearchItem('log_file', 'Logs File', highlight=range(6,7)),
+        QuicksearchItem('pull', 'Pull', highlight=range(0,1)),
+        QuicksearchItem('push', 'Push', highlight=range(2,3)),
+    ]
 
-class GitCommand(DirectoryPaneCommand):
     def _execute(self, command, path=None, close_on_end=2):
         arg_command = '/command:' + command
         if path is None:
@@ -20,17 +28,6 @@ class GitCommand(DirectoryPaneCommand):
 
         show_status_message(' '.join(exec_command))
         subprocess.run(' '.join(exec_command))
-
-
-class ListGitCommands(GitCommand):
-    _git_commands = [
-        QuicksearchItem('add', 'Add'),
-        QuicksearchItem('commit', 'Commit'),
-        QuicksearchItem('log', 'Logs Folder'),
-        QuicksearchItem('log_file', 'Logs File'),
-        QuicksearchItem('pull', 'Pull'),
-        QuicksearchItem('push', 'Push'),
-    ]
 
     def __call__(self):
         result = show_quicksearch(self._get_items)
@@ -48,17 +45,20 @@ class ListGitCommands(GitCommand):
             pass
 
     def _get_items(self, query):
-        for item in self._git_commands:
-            try:
-                index = item.title.lower().index(query)
-            except ValueError as not_found:
-                continue
-            else:
-                # The characters that should be highlighted:
-                highlight = range(index, index + len(query))
-                yield QuicksearchItem(item.value, item.title, highlight=highlight)
-
-class GitCommit(GitCommand):
-    def __call__(self):
-        self._execute('commit')
-        
+        option = query.lower()
+        if option == 'a':
+            yield self._git_commands[0]
+        elif option == 'c':
+            yield self._git_commands[1]
+        elif option == 'l':
+            yield self._git_commands[2]
+        elif option == 'f':
+            yield self._git_commands[3]
+        elif option == 'p':
+            yield self._git_commands[4]
+        elif option == 's':
+            yield self._git_commands[5]
+        else:
+            for x in self._git_commands:
+                yield x
+            query = ''
