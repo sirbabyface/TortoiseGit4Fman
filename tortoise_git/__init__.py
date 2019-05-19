@@ -10,8 +10,9 @@ class ListGitCommands(DirectoryPaneCommand):
     _git_commands = [
         QuicksearchItem('add', 'Add', highlight=range(0,1)),
         QuicksearchItem('commit', 'Commit', highlight=range(0,1)),
+        QuicksearchItem('diff', 'Diff', highlight=range(0,1)),
         QuicksearchItem('log', 'Logs Folder', highlight=range(0,1)),
-        QuicksearchItem('log_file', 'Logs File', highlight=range(6,7)),
+        QuicksearchItem('log_file', 'Logs File', highlight=range(5,6)),
         QuicksearchItem('pull', 'Pull', highlight=range(0,1)),
         QuicksearchItem('push', 'Push', highlight=range(2,3)),
     ]
@@ -45,20 +46,32 @@ class ListGitCommands(DirectoryPaneCommand):
             pass
 
     def _get_items(self, query):
+        if len(query) == 0:
+            return _git_commands
+        
         option = query.lower()
         if option == 'a':
             yield self._git_commands[0]
         elif option == 'c':
             yield self._git_commands[1]
-        elif option == 'l':
+        elif option == 'd':
             yield self._git_commands[2]
-        elif option == 'f':
+        elif option == 'l':
             yield self._git_commands[3]
-        elif option == 'p':
+        elif option == 'f':
             yield self._git_commands[4]
-        elif option == 's':
+        elif option == 'p':
             yield self._git_commands[5]
+        elif option == 's':
+            yield self._git_commands[6]
         else:
-            for x in self._git_commands:
-                yield x
-            query = ''
+            # If it it not one of the letters, tries to filter
+            for item in self._git_commands:
+                try:
+                    index = item.title.lower().index(query.lower())
+                except ValueError as not_found:
+                    continue
+                else:
+                    # The characters that should be highlighted:
+                    highlight = range(index, index + len(query))
+                    yield QuicksearchItem(item.value, item.title, highlight=highlight)
