@@ -17,8 +17,11 @@ window in the current path in the selected pane.
 
 So far the git commands available are:
 - **A**dd
+- Clo**n**e
 - **C**ommit
-- **L**og
+- **D**iff
+- **L**og Folder
+- Log **F**ile
 - **P**ull
 - Pu**s**h
 
