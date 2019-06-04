@@ -1,14 +1,16 @@
 #
 # Load the libraries that are used in these commands.
 #
+import subprocess
 from fman import DirectoryPaneCommand, show_status_message, show_alert
 from fman import QuicksearchItem, show_quicksearch
 from fman.url import as_human_readable
-import subprocess
+
 
 class ListGitCommands(DirectoryPaneCommand):
     _git_commands = [
         QuicksearchItem('add', 'Add', highlight=range(0,1)),
+        QuicksearchItem('clone', 'Clone', highlight=range(3,4)),
         QuicksearchItem('commit', 'Commit', highlight=range(0,1)),
         QuicksearchItem('diff', 'Diff', highlight=range(0,1)),
         QuicksearchItem('log', 'Logs Folder', highlight=range(0,1)),
@@ -16,6 +18,7 @@ class ListGitCommands(DirectoryPaneCommand):
         QuicksearchItem('pull', 'Pull', highlight=range(0,1)),
         QuicksearchItem('push', 'Push', highlight=range(2,3)),
     ]
+    _git_keys = ['a', 'n', 'c', 'd', 'l', 'f', 'p', 's']
 
     def _execute(self, command, path=None, close_on_end=2):
         arg_command = '/command:' + command
@@ -45,33 +48,21 @@ class ListGitCommands(DirectoryPaneCommand):
         else:
             pass
 
+
     def _get_items(self, query):
-        if len(query) == 0:
-            return _git_commands
-        
-        option = query.lower()
-        if option == 'a':
-            yield self._git_commands[0]
-        elif option == 'c':
-            yield self._git_commands[1]
-        elif option == 'd':
-            yield self._git_commands[2]
-        elif option == 'l':
-            yield self._git_commands[3]
-        elif option == 'f':
-            yield self._git_commands[4]
-        elif option == 'p':
-            yield self._git_commands[5]
-        elif option == 's':
-            yield self._git_commands[6]
+        if not query:
+            for command in self._git_commands:
+                yield command
         else:
-            # If it it not one of the letters, tries to filter
-            for item in self._git_commands:
-                try:
-                    index = item.title.lower().index(query.lower())
-                except ValueError as not_found:
-                    continue
-                else:
-                    # The characters that should be highlighted:
-                    highlight = range(index, index + len(query))
-                    yield QuicksearchItem(item.value, item.title, highlight=highlight)
+            option = query.lower()
+            try:
+                yield self._git_commands[self._git_keys.index(option)]
+            except ValueError:
+                # If it it not one of the letters, tries to filter
+                for item in self._git_commands:
+                    try:
+                        index = item.title.lower().index(query.lower())
+                        highlight = range(index, index + len(query))
+                        yield QuicksearchItem(item.value, item.title, highlight=highlight)
+                    except ValueError:
+                        continue
