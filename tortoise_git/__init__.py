@@ -2,14 +2,32 @@
 # Load the libraries that are used in these commands.
 #
 import subprocess
+import locale
 from fman import DirectoryPaneCommand, show_status_message, show_alert
+from fman import DirectoryPaneListener
 from fman import QuicksearchItem, show_quicksearch
 from fman.url import as_human_readable
+
+
+class GitInfo(DirectoryPaneListener):
+    def on_path_changed(self):
+        try:
+            cmd = 'git rev-parse --abbrev-ref HEAD'
+            path = as_human_readable(self.pane.get_path())
+            result = subprocess.run(cmd, stdout=subprocess.PIPE, cwd=path, shell=True)
+            branch = result.stdout.decode(locale.getpreferredencoding())[:-1]
+            if branch != '':
+                show_status_message('Git branch ' + branch)
+            else:
+                show_status_message('')
+        except NotADirectoryError as e:
+            pass
 
 
 class ListGitCommands(DirectoryPaneCommand):
     _git_commands = [
         QuicksearchItem('add', 'Add', highlight=range(0,1)),
+        QuicksearchItem('switch', 'Checkout/Switch Branch', highlight=range(4,5)),
         QuicksearchItem('clone', 'Clone', highlight=range(3,4)),
         QuicksearchItem('commit', 'Commit', highlight=range(0,1)),
         QuicksearchItem('diff', 'Diff', highlight=range(0,1)),
@@ -18,7 +36,7 @@ class ListGitCommands(DirectoryPaneCommand):
         QuicksearchItem('pull', 'Pull', highlight=range(0,1)),
         QuicksearchItem('push', 'Push', highlight=range(2,3)),
     ]
-    _git_keys = ['a', 'n', 'c', 'd', 'l', 'f', 'p', 's']
+    _git_keys = ['a', 'k', 'n', 'c', 'd', 'l', 'f', 'p', 's']
 
     def _execute(self, command, path=None, close_on_end=2):
         arg_command = '/command:' + command
