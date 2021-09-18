@@ -31,12 +31,14 @@ class ListGitCommands(DirectoryPaneCommand):
         QuicksearchItem('clone', 'Clone', highlight=range(3,4)),
         QuicksearchItem('commit', 'Commit', highlight=range(0,1)),
         QuicksearchItem('diff', 'Diff', highlight=range(0,1)),
+        QuicksearchItem('init', 'Init', highlight=range(0,1)),
         QuicksearchItem('log', 'Logs Folder', highlight=range(0,1)),
         QuicksearchItem('log_file', 'Logs File', highlight=range(5,6)),
         QuicksearchItem('pull', 'Pull', highlight=range(0,1)),
         QuicksearchItem('push', 'Push', highlight=range(2,3)),
+        QuicksearchItem('resolve', 'Resolve Conflicts', highlight=range(0,1)),
     ]
-    _git_keys = ['a', 'k', 'n', 'c', 'd', 'l', 'f', 'p', 's']
+    _git_keys = ['a', 'k', 'n', 'c', 'd', 'i', 'l', 'f', 'p', 's', 'r']
 
     def _execute(self, command, path=None, close_on_end=2):
         arg_command = '/command:' + command

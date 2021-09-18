@@ -17,12 +17,15 @@ window in the current path in the selected pane.
 
 So far the git commands available are:
 - **A**dd
+- Chec**k**out
 - Clo**n**e
 - **C**ommit
 - **D**iff
+- **I**nit
 - **L**og Folder
 - Log **F**ile
 - **P**ull
 - Pu**s**h
+- **R**esolve Confilts
 
 If you want more commands, just create a issue or do a pull request.
