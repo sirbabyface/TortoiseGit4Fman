@@ -31,7 +31,7 @@ class ListGitCommands(DirectoryPaneCommand):
         QuicksearchItem('clone', 'Clone', highlight=range(3,4)),
         QuicksearchItem('commit', 'Commit', highlight=range(0,1)),
         QuicksearchItem('diff', 'Diff', highlight=range(0,1)),
-        QuicksearchItem('init', 'Init', highlight=range(0,1)),
+        QuicksearchItem('repocreate', 'Init', highlight=range(0,1)),
         QuicksearchItem('log', 'Logs Folder', highlight=range(0,1)),
         QuicksearchItem('log_file', 'Logs File', highlight=range(5,6)),
         QuicksearchItem('pull', 'Pull', highlight=range(0,1)),
